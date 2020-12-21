@@ -4,7 +4,9 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/ConvORM/Conv.ORM.NET5</RepositoryUrl>
+    <PackageProjectUrl>https://convorm.tech/</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
