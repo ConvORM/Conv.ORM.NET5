@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/ConvORM/Conv.ORM.NET5</RepositoryUrl>
     <PackageProjectUrl>https://convorm.tech/</PackageProjectUrl>
     <PackageId>Conv.ORM</PackageId>
-    <Version>1.0.22-beta</Version>
+    <Version>1.0.23-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
