@@ -1,4 +1,5 @@
-﻿using Conv.ORM.Repository;
+﻿using Conv.ORM.Logging;
+using Conv.ORM.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
@@ -11,7 +12,6 @@ namespace Conv.ORM.Connection.Helpers
 {
     class SqlServerConnectionDriverHelper
     {
-
         public static Entity ConvertReaderToEntity(MySqlDataReader reader, Type type)
         {
             var instance = Activator.CreateInstance(type);
@@ -35,7 +35,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
 #if DEBUG
-                            Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
+                            LoggerKepper.Log(LoggerType.ltError, "SqlServerConnectionDriverHelper", $"{field.Name} in query return if wrong type. Type returned in query result: {reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
 #endif
                         }
                     }
@@ -86,7 +86,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
 #if DEBUG
-                            Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
+                            LoggerKepper.Log(LoggerType.ltError, "SqlServerConnectionDriverHelper", $"{field.Name} in query return if wrong type. Type returned in query result: {reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
 #endif
                         }
                     }

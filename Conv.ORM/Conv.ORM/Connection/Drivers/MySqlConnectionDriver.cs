@@ -1,14 +1,13 @@
-﻿using Conv.ORM.Connection.Classes;
-using Conv.ORM.Connection.Drivers.Interfaces;
+﻿using Conv.ORM.Connection.Drivers.Interfaces;
 using Conv.ORM.Connection.Helpers;
 using Conv.ORM.Connection.Parameters;
+using Conv.ORM.Logging;
 using Conv.ORM.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Conv.ORM.Connection.Drivers
 {
@@ -50,7 +49,7 @@ namespace Conv.ORM.Connection.Drivers
             };
 
 #if DEBUG
-            Console.WriteLine("Query: " + sql);
+            LoggerKepper.Log(LoggerType.ltDebug,"MySqlConnectionDriver","Query: " + sql);
 #endif
 
             foreach (var key in parameters.Keys)
@@ -64,14 +63,14 @@ namespace Conv.ORM.Connection.Drivers
             {
                 _connection.Open();
                 var rowsAffected = command.ExecuteNonQuery();
-                Console.WriteLine("Execute Non Query: OK");
-                Console.WriteLine("Number of rows affected: " + rowsAffected.ToString());
+                LoggerKepper.Log(LoggerType.ltInformation, "MySqlConnectionDriver", "Execute Non Query: OK");
+                LoggerKepper.Log(LoggerType.ltInformation, "MySqlConnectionDriver", "Number of rows affected: " + rowsAffected.ToString());
                 return rowsAffected;
             }
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine("Error: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriver", e.Message);
 #endif
                 return 0;
             }
@@ -89,7 +88,7 @@ namespace Conv.ORM.Connection.Drivers
             };
 
 #if DEBUG
-            Console.WriteLine("Query: " + sql);
+            LoggerKepper.Log(LoggerType.ltDebug, "MySqlConnectionDriver", "Query: " + sql);
 #endif
 
             command.Connection = _connection;
@@ -103,7 +102,7 @@ namespace Conv.ORM.Connection.Drivers
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine("Error: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriver", e.Message);
 #endif
                 return null;
             }
@@ -121,7 +120,7 @@ namespace Conv.ORM.Connection.Drivers
             };
 
 #if DEBUG
-            Console.WriteLine("Query: " + sql);
+            LoggerKepper.Log(LoggerType.ltDebug, "MySqlConnectionDriver", "Query: " + sql);
 #endif
 
             command.Connection = _connection;
@@ -135,7 +134,7 @@ namespace Conv.ORM.Connection.Drivers
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine("Error: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriver", e.Message);
 #endif
                 return null;
             }
@@ -153,15 +152,15 @@ namespace Conv.ORM.Connection.Drivers
             {
                 _connection.Open();
                 var lid = lastId.ExecuteReader();
-                Console.WriteLine("Execute Last ID: OK");
-                Console.WriteLine("Execute Last ID - Has Rows: " + (lid.HasRows ? "True" : "False"));
+                LoggerKepper.Log(LoggerType.ltInformation, "MySqlConnectionDriver", "Execute Last ID: OK");
+                LoggerKepper.Log(LoggerType.ltInformation, "MySqlConnectionDriver", "Execute Last ID - Has Rows: " + (lid.HasRows ? "True" : "False"));
                 lid.Read();
                 return Convert.ToInt32((ulong)lid[0]);
             }
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine("Error: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriver", e.Message);
 #endif
                 return 0;
             }
@@ -169,12 +168,6 @@ namespace Conv.ORM.Connection.Drivers
             {
                 _connection.Close();
             }
-        }
-
-        public Entity Insert(Entity entity)
-        {
-            Converter.EntityToModelEntity(entity);
-            throw new NotImplementedException();
         }
 
         private static string GenerateConnectionString(ConnectionParameters parameters)

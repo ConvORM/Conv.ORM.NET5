@@ -172,18 +172,13 @@ namespace Conv.ORM.Connection.Classes.CommandBuilders
 
         private static string ConvertValue(object value)
         {
-
-            switch (value)
+            return value switch
             {
-                case int i:
-                    return i.ToString();
-                case string s:
-                    return "'" + s + "'";
-                case DateTime time:
-                    return "'" + time.ToString("yyyy-MM-dd HH:mm:ss") + "'";
-                default:
-                    return "'" + value.ToString() + "'";
-            }
+                int i => i.ToString(),
+                string s => "'" + s + "'",
+                DateTime time => "'" + time.ToString("yyyy-MM-dd HH:mm:ss") + "'",
+                _ => "'" + value.ToString() + "'",
+            };
         }
 
     }

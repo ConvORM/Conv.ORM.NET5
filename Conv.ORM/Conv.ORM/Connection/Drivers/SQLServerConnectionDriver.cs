@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Conv.ORM.Connection.Drivers.Interfaces;
+using Conv.ORM.Connection.Helpers;
+using Conv.ORM.Connection.Parameters;
+using Conv.ORM.Logging;
+using Conv.ORM.Repository;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using Conv.ORM.Connection.Drivers.Interfaces;
-using Conv.ORM.Connection.Helpers;
-using Conv.ORM.Connection.Parameters;
-using Conv.ORM.Repository;
 
 namespace Conv.ORM.Connection.Drivers
 {
@@ -51,13 +51,13 @@ namespace Conv.ORM.Connection.Drivers
 
         public int ExecuteCommand(string sql, Dictionary<string, object> parameters)
         {
-            SqlCommand command = new SqlCommand
+            SqlCommand command = new()
             {
                 CommandText = sql
             };
 
 #if DEBUG
-            Console.WriteLine("Query: " + sql);
+            LoggerKepper.Log(LoggerType.ltDebug, "SQLServerConnectionDriver", "Query: " + sql);
 #endif
 
             foreach (var key in parameters.Keys)
@@ -71,14 +71,14 @@ namespace Conv.ORM.Connection.Drivers
             {
                 _connection.Open();
                 var rowsAffected = command.ExecuteNonQuery();
-                Console.WriteLine("Execute Non Query: OK");
-                Console.WriteLine("Number of rows affected: " + rowsAffected.ToString());
+                LoggerKepper.Log(LoggerType.ltInformation, "SQLServerConnectionDriver", "Execute Non Query: OK");
+                LoggerKepper.Log(LoggerType.ltInformation, "SQLServerConnectionDriver", "Number of rows affected: " + rowsAffected.ToString());
                 return rowsAffected;
             }
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine("Error: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "SQLServerConnectionDriver", "Error: " + e.Message);
 #endif
                 return 0;
             }

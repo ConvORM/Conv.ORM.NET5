@@ -1,9 +1,9 @@
-﻿using Conv.ORM.Repository;
+﻿using Conv.ORM.Logging;
+using Conv.ORM.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Conv.ORM.Connection.Helpers
 {
@@ -32,7 +32,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
                             #if DEBUG
-                            Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
+                            LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriverHelper", $"{field.Name} in query return if wrong type. Type returned in query result: {reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
                             #endif
                         }
                     }
@@ -83,7 +83,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
                             #if DEBUG
-                                Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
+                                LoggerKepper.Log(LoggerType.ltError, "MySqlConnectionDriverHelper" ,$"{field.Name} in query return if wrong type. Type returned in query result: { reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
                             #endif
                         }
                     }
