@@ -1,5 +1,6 @@
 ﻿using Conv.ORM.Connection.Enums;
 using Conv.ORM.Connection.Parameters;
+using Conv.ORM.Logging;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,11 +18,12 @@ namespace Conv.ORM.Connection
 
             //Log in debug mode;
             #if DEBUG
-                Console.WriteLine("File path: " + path);
+            LoggerKepper.Log(LoggerType.ltInformation, "ConnectionsParametersFile", $"File path: {path}");
             #endif
 
             StreamReader xmlFile;
 
+           
             try
             {
                 xmlFile = new StreamReader(path);
@@ -31,7 +33,7 @@ namespace Conv.ORM.Connection
             catch (Exception e)
             {
                 #if DEBUG
-                    Console.WriteLine("Error in open the connection file: " + e.Message);
+                LoggerKepper.Log(LoggerType.ltError, "ConnectionsParametersFile", $"Error in open the connection file: {e.Message}");
                 #endif
 
                 xmlFile = null;
@@ -49,7 +51,7 @@ namespace Conv.ORM.Connection
             catch (InvalidOperationException ex)
             {
                 #if DEBUG
-                    Console.WriteLine("Error in open the connection file: " + ex.Message);
+                    LoggerKepper.Log(LoggerType.ltError, "ConnectionsParametersFile", $"Error in open the connection file: {ex.Message}");
                 #endif
             }
             finally
