@@ -1,5 +1,6 @@
 ﻿using Conv.ORM.Connection.Enums;
 using Conv.ORM.Connection.Parameters;
+using Conv.ORM.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,6 +71,10 @@ namespace Conv.ORM.Connection
 
         private static Connection GetNewConnection(ConnectionParameters parameters)
         {
+            if (parameters is null)
+            {
+                throw new ConnectionException("C001", "The connection parameters are empty", "Check if connection file exists or if you pass the parameters");
+            }
             return new Connection(parameters).GetConnection();
         }
 

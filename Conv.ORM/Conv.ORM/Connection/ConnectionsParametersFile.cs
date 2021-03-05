@@ -11,9 +11,10 @@ namespace Conv.ORM.Connection
     internal class ConnectionsParametersFile
     {
         private ConnectionsParameters Connections;
+        private bool HasConnections;
         internal ConnectionsParametersFile()
         {
-            var path = Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory)).FullName).FullName;
+            var path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             path += @"\connection.xml";
 
             //Log in debug mode;
@@ -26,6 +27,11 @@ namespace Conv.ORM.Connection
            
             try
             {
+                if (!File.Exists(path))
+                {
+                    HasConnections = false;
+                    throw new Exception("Connection file not found.");
+                }
                 xmlFile = new StreamReader(path);
                 LoadConnectionParametersFromFile(xmlFile);
 
@@ -47,6 +53,7 @@ namespace Conv.ORM.Connection
             try
             {
                 Connections = serializer.Deserialize(xmlFile) as ConnectionsParameters;
+                HasConnections = (Connections is not null) && (Connections.Connections.Count > 0);
             }
             catch (InvalidOperationException ex)
             {
@@ -62,27 +69,27 @@ namespace Conv.ORM.Connection
 
         internal ConnectionParameters GetFirstConnectionParameter()
         {
-            return Connections.Connections.Count == 0 ? null : Connections.Connections[0];
+            return HasConnections ? Connections.Connections[0] : null;
         }
 
         internal ConnectionParameters GetConnectionParameters(string name)
         {
-            return Connections.Connections.Count == 0 ? null : LocateConnectionParameters(name);
+            return HasConnections ? LocateConnectionParameters(name) : null;
         }
 
         internal ConnectionParameters GetConnectionParameters(EConnectionDriverTypes type)
         {
-            return Connections.Connections.Count == 0 ? null : LocateConnectionParameters(type);
+            return HasConnections ? LocateConnectionParameters(type) : null;
         }
 
         private ConnectionParameters LocateConnectionParameters(string name)
         {
-            return Connections.Connections.FirstOrDefault(parameters => parameters.Name == name);
+            return HasConnections ? Connections.Connections.FirstOrDefault(parameters => parameters.Name == name) : null;
         }
 
         private ConnectionParameters LocateConnectionParameters(EConnectionDriverTypes type)
         {
-            return Connections.Connections.FirstOrDefault(parameters => parameters.ConnectionDriverType == type);
+            return HasConnections ? Connections.Connections.FirstOrDefault(parameters => parameters.ConnectionDriverType == type) : null;
         }
     }
 }
