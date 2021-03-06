@@ -1,5 +1,6 @@
 ﻿using Conv.ORM.Connection.Classes.CommandBuilders;
 using Conv.ORM.Connection.Classes.CommandBuilders.Interfaces;
+using Conv.ORM.Connection.Classes.CommandBuilders.SqlServer;
 using Conv.ORM.Connection.Classes.QueryBuilders;
 using Conv.ORM.Connection.Enums;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace Conv.ORM.Connection.Classes
                 case EConnectionDriverTypes.ecdtPostgreeSQL:
                     return null;
                 case EConnectionDriverTypes.ecdtSQLServer:
-                    return null;
+                    return new SqlServerCommandSelectBuilder(_modelEntity, queryConditionsBuilder);
                 case EConnectionDriverTypes.ecdtNone:
                     return null;
                 default:
@@ -84,7 +85,7 @@ namespace Conv.ORM.Connection.Classes
                 case EConnectionDriverTypes.ecdtPostgreeSQL:
                     return null;
                 case EConnectionDriverTypes.ecdtSQLServer:
-                    return null;
+                    return new SqlServerCommandUpdateBuilder(_modelEntity, queryConditionsBuilder);
                 case EConnectionDriverTypes.ecdtNone:
                     return null;
                 default:

@@ -1,18 +1,15 @@
-﻿using Conv.ORM.Logging;
-using Conv.ORM.Repository;
-using MySql.Data.MySqlClient;
+﻿using Conv.ORM.Repository;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Conv.ORM.Connection.Helpers
 {
     class SqlServerConnectionDriverHelper
     {
-        public static Entity ConvertReaderToEntity(MySqlDataReader reader, Type type)
+
+        public static Entity ConvertReaderToEntity(SqlDataReader reader, Type type)
         {
             var instance = Activator.CreateInstance(type);
 
@@ -35,7 +32,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
 #if DEBUG
-                            LoggerKepper.Log(LoggerType.ltError, "SqlServerConnectionDriverHelper", $"{field.Name} in query return if wrong type. Type returned in query result: {reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
+                            Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
 #endif
                         }
                     }
@@ -58,7 +55,7 @@ namespace Conv.ORM.Connection.Helpers
             return convertedValue != null;
         }
 
-        public static IList ConvertReaderToCollectionOfEntity(MySqlDataReader reader, Type entityType)
+        public static IList ConvertReaderToCollectionOfEntity(SqlDataReader reader, Type entityType)
         {
 
             var listType = typeof(List<>).MakeGenericType(entityType);
@@ -86,7 +83,7 @@ namespace Conv.ORM.Connection.Helpers
                         else
                         {
 #if DEBUG
-                            LoggerKepper.Log(LoggerType.ltError, "SqlServerConnectionDriverHelper", $"{field.Name} in query return if wrong type. Type returned in query result: {reader.GetValue(i).GetType()} Type of entity field: {field.FieldType}");
+                            Console.WriteLine(field.Name + " in query return if wrong type. Type returned in query result: " + reader.GetValue(i).GetType().ToString() + " Type of entity field: " + field.FieldType.ToString());
 #endif
                         }
                     }
