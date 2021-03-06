@@ -6,6 +6,7 @@ using Conv.ORM.Repository;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Conv.ORM.Connection.Drivers
@@ -90,17 +91,92 @@ namespace Conv.ORM.Connection.Drivers
 
         public Entity ExecuteScalarQuery(string sql, Type entityType)
         {
-            throw new NotImplementedException();
+            var command = new SqlCommand
+            {
+                CommandText = sql
+            };
+
+#if DEBUG
+            LoggerKepper.Log(LoggerType.ltInformation, "SQLServerConnectionDriver", "Query: " + sql);
+#endif
+
+            command.Connection = _connection;
+
+            try
+            {
+                _connection.Open();
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                return SqlServerConnectionDriverHelper.ConvertReaderToEntity(reader, entityType);
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                LoggerKepper.Log(LoggerType.ltError, "SQLServerConnectionDriver", "Error: " + e.Message);
+#endif
+                return null;
+            }
+            finally
+            {
+                _connection.Close();
+            }
         }
 
         public IList ExecuteQuery(string sql, Type entityType)
         {
-            throw new NotImplementedException();
+            var command = new SqlCommand
+            {
+                CommandText = sql
+            };
+
+#if DEBUG
+            LoggerKepper.Log(LoggerType.ltDebug, "SQLServerConnectionDriver", "Query: " + sql);
+#endif
+
+            command.Connection = _connection;
+
+            try
+            {
+                _connection.Open();
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                return SqlServerConnectionDriverHelper.ConvertReaderToCollectionOfEntity(reader, entityType);
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                LoggerKepper.Log(LoggerType.ltError, "SQLServerConnectionDriver", "Error: " + e.Message);
+#endif
+                return null;
+            }
+            finally
+            {
+                _connection.Close();
+            }
         }
 
         public int GetLastInsertedId()
         {
-            throw new NotImplementedException();
+            var lastId = new SqlCommand { Connection = _connection, CommandText = ("SELECT @@identity as 'lastID' ") };
+
+            try
+            {
+                _connection.Open();
+                var lid = lastId.ExecuteReader();
+                LoggerKepper.Log(LoggerType.ltInformation, "SQLServerConnectionDriver", "Execute Last ID: OK");
+                LoggerKepper.Log(LoggerType.ltInformation, "SQLServerConnectionDriver", "Execute Last ID - Has Rows: " + (lid.HasRows ? "True" : "False"));
+                lid.Read();
+                return Convert.ToInt32((ulong)lid[0]);
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                LoggerKepper.Log(LoggerType.ltError, "SQLServerConnectionDriver", "Error: " + e.Message);
+#endif
+                return 0;
+            }
+            finally
+            {
+                _connection.Close();
+            }
         }
     }
 }

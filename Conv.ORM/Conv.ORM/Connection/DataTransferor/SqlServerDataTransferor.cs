@@ -53,7 +53,23 @@ namespace Conv.ORM.Connection.DataTransferor.Interfaces
 
         public Entity Update()
         {
-            throw new System.NotImplementedException();
+            var commandBuilder = new CommandFactory(_modelEntity, EConnectionDriverTypes.ecdtSQLServer);
+
+            var conditionsBuilder = new QueryConditionsBuilder();
+            foreach (var column in _modelEntity.GetPrimaryFields())
+            {
+                conditionsBuilder.AddQueryCondition(column.ColumnName, EConditionTypes.Equals,
+                    new object[] { _modelEntity.GetPrimaryFieldValue(column.ColumnName) });
+            }
+
+            if (_connection.ConnectionDriver()
+                .ExecuteCommand(commandBuilder.GetSqlUpdate(out var parametersValues, conditionsBuilder), parametersValues) > 0)
+            {
+                var lastInsertedId = _connection.ConnectionDriver().GetLastInsertedId();
+                return Find(new int[] { lastInsertedId });
+            }
+            else
+                return null;
         }
 
         public IList FindAll()
@@ -72,7 +88,18 @@ namespace Conv.ORM.Connection.DataTransferor.Interfaces
 
         public Entity Find(int[] ids)
         {
-            throw new NotImplementedException();
+            var conditionsBuilder = new QueryConditionsBuilder();
+            int idsCount = 0;
+            foreach (var column in _modelEntity.GetPrimaryFields())
+            {
+                conditionsBuilder.AddQueryCondition(column.ColumnName, EConditionTypes.Equals,
+                    new object[] { ids[0] });
+
+                idsCount++;
+            }
+            return _connection.ConnectionDriver()
+                .ExecuteScalarQuery(new CommandFactory(_modelEntity, EConnectionDriverTypes.ecdtSQLServer).GetSqlSelect(conditionsBuilder),
+                    _modelEntity.EntityType);
         }
     }
 }

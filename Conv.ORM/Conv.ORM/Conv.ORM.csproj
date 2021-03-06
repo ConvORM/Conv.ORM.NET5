@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Connection\Classes\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Repository\" />
   </ItemGroup>
