@@ -34,7 +34,7 @@ Table of contents
 =================
 <!--ts-->
    * [About the project](#-about-the-project)
-     * [What Works?](#-what-works)
+     * [What Works?](#-it-works)
      * [RoadMap](#-roadmap)
    * [Firsts steps](#-firsts-steps)
      * [How to implements in your application](#user-content--implements-in-your-app)
@@ -182,7 +182,7 @@ queryConditions.AddQueryCondition("active", EConditionTypes.Equals, new object[]
 
 dgvRegisters.DataSource = ConvORMHelper.ConvertListToDataTable(userEntity.Find(queryConditions));
 ``` 
-5. **For full documentation, go to [here](https://convorm.tech) (In development)**
+5. **📚 For full documentation, go to [here](https://convorm.tech) (In development)**
 
 ------
 <h4 align="center">
