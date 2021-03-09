@@ -1,5 +1,5 @@
 <h1 align="center">
-    Conv.ORM
+    Conv.ORM - NET 5.0
 </h1>
 
 <h3 align="center">
@@ -63,7 +63,7 @@ The full roadmap can be found in full [here](https://github.com/ConvORM/Conv.ORM
 - [ ] Support for SQLite;
 
 ## 🧭 Firsts Steps
-Before you start, you will need to install it on your PC:
+Before you start, you will need to install it on your project:
 
 Using dotnet cli
 ```sh
