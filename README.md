@@ -110,7 +110,7 @@ public class UserEntity : Entity
 ```cs
 public UserEntity Save()
 {
-    var userRepository = new Repository.Repository();
+    var userRepository = new Repository();
     try
     {
         if (UserId != 0)
@@ -129,7 +129,7 @@ public UserEntity Save()
 ```cs
 public IList FindAll()
 {
-    var userRepository = new Repository.Repository();
+    var userRepository = new Repository();
     try
     {
         return userRepository.FindAll(this);
@@ -145,7 +145,7 @@ public IList FindAll()
 ```cs
 public IList Find(QueryConditionsBuilder conditionsBuilder)
 {
-    var userRepository = new Repository.Repository();
+    var userRepository = new Repository();
     try
     {
         return userRepository.Find(this, conditionsBuilder);
@@ -161,7 +161,7 @@ public IList Find(QueryConditionsBuilder conditionsBuilder)
 ```cs
 public UserEntity Find(int id)
 {
-    var userRepository = new Repository.Repository();
+    var userRepository = new Repository();
     try
     {
         return (UserEntity)userRepository.Find(this, new int[] {id});
